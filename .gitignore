@@ -1,6 +1,8 @@
 **/.vscode
 **/target
 
+**/desktop.ini
+
 # Compiled class file
 *.class
 
