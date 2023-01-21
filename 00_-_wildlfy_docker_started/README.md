@@ -2,10 +2,10 @@
 Wildfly application within docker image (using official wildfly docker image registry).
 
 ## Build
-Run ```build.bat``` script. Build application from source (via maven) and build docker image from given Dockerfile.
+Run ```build.bat``` script. Build docker image from given Dockerfile.
 
 ## Run
-Execute ```run.bat``` script. Find/run build docker image.
+Execute ```run.bat``` script. Find/run build docker image. Using simple jax-rs application in order to demonstration that wildfly works, see ```/app/app.war``` artifact.
 
 ## Test
 Execute ```test.bat``` script or call in ```curl -v http://localhost:8080/app/resources/message```.
