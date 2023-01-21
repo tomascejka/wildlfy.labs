@@ -1,6 +1,6 @@
 @echo off
 
-SET appName=wildfly-docker-started
+SET appName=wildfly-dockerfile-official
 SET imgName=tocecz/%appName%
 
 REM zavola ze console je zaroven pohledem do logu

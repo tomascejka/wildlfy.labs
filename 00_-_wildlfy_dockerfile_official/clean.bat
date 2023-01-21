@@ -1,6 +1,6 @@
 @echo off
 
-SET appName=wildfly-docker-started
+SET appName=wildfly-dockerfile-official
 SET imgName=tocecz/%appName%
 
 call docker stop %appName%
