@@ -1,3 +1,5 @@
 @echo off
 
-curl http://localhost:8080/app/resources/message
+call _var.bat
+
+curl -v http://localhost:%portOUT%/app/resources/message

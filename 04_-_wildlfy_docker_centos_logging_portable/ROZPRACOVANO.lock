@@ -1,0 +1,4 @@
+mkrni sem 
+	- https://goldmann.pl/blog/2014/07/18/logging-with-the-wildfly-docker-image/#_modifying_the_wildfly_image
+
+... je tam nastaveni logovani per kontejner, tzn. kdyz spustim vice jak jeden, tak kazdy kontejner si udela svoji PODSLOZKU!!!
