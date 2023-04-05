@@ -1,0 +1,327 @@
+From: <Saved by Blink>
+Snapshot-Content-Location: http://phoenix.inf.upol.cz/~outrata/courses/os2/texts/signals_l.html
+Subject: =?utf-8?Q?Linux=20-=20Sign=C3=A1ly=20(Signals)?=
+Date: Sat, 1 Apr 2023 06:56:28 -0000
+MIME-Version: 1.0
+Content-Type: multipart/related;
+	type="text/html";
+	boundary="----MultipartBoundary--IOZaqYxGBMNeBBL5sRzDTrlEVxQOwYPID1uyg8UdoC----"
+
+
+------MultipartBoundary--IOZaqYxGBMNeBBL5sRzDTrlEVxQOwYPID1uyg8UdoC----
+Content-Type: text/html
+Content-ID: <frame-1112AF88572DA56F55C00536122F543B@mhtml.blink>
+Content-Transfer-Encoding: quoted-printable
+Content-Location: http://phoenix.inf.upol.cz/~outrata/courses/os2/texts/signals_l.html
+
+<html><head><meta http-equiv=3D"Content-Type" content=3D"text/html; charset=
+=3DISO-8859-2">
+
+<title>Linux - Sign=E1ly (Signals)</title>
+</head>
+<body bgcolor=3D"#ffffff">
+<div align=3D"center"><h2>Linux - Sign=E1ly (Signals)</h2></div>
+
+<p>
+<dfn>Sign=E1ly</dfn> je mechanizmus pro komunikaci a manipulaci s procesy.
+Sign=E1l je speci=E1ln=ED zpr=E1va zaslan=E1 procesu. Sign=E1ly jsou asynch=
+ronn=ED, tj.
+kdy=BE jej proces obdr=BE=ED, ihned ho obslou=BE=ED, bez dokon=E8en=ED aktu=
+=E1ln=ED funkce (ta
+se dokon=E8=ED a=BE pak). Ka=BEd=FD sign=E1l je specifikov=E1n sv=FDm =E8=
+=EDslem, v programech
+se v=B9ak pou=BE=EDvaj=ED jm=E9na definovan=E1 v <code>&lt;bits/signum.h&gt=
+;</code>.
+V=B9echny sign=E1ly jsou pak pops=E1ny v <kbd>signal(7)</kbd>.
+</p>
+
+<h3>Zasl=E1n=ED sign=E1lu</h3>
+
+<p><table border=3D"" cellspacing=3D"0" cellpadding=3D"2" width=3D"100%">
+<tbody><tr><td><kbd>raise(3)</kbd></td></tr>
+<tr><td><code>#include &lt;signal.h&gt;</code></td></tr>
+<tr><td><code><b>int raise (int sig);</b></code></td></tr>
+<tr><td><ul>
+<li>po=B9le sign=E1l sig vlastn=EDmu procesu</li>
+<li>vrac=ED 0, p=F8i chyb=EC nenulov=E9 =E8=EDslo</li>
+</ul></td></tr>
+</tbody></table></p>
+
+<p><strong>P=F8.</strong>
+Vytvo=F8te program, kter=FD si po=B9le SIGTERM a t=EDm se tedy ukon=E8=ED.
+Program nema=BEte, budete ho roz=B9i=F8ovat o dal=B9=ED prob=EDran=E9 funkc=
+e!
+</p>
+
+<p>
+Proces m=F9=BEe poslat sign=E1l jin=E9mu procesu. Nap=F8. ho ukon=E8it zasl=
+=E1n=EDm SIGTERM
+nebo SIGKILL.
+</p>
+
+<p><em>
+OT=C1ZKA: Jak=FD je rozd=EDl mezi SIGTERM a SIGKILL?
+</em></p>
+
+<p><table border=3D"" cellspacing=3D"0" cellpadding=3D"2" width=3D"100%">
+<tbody><tr><td><kbd>kill(1)</kbd></td></tr>
+<tr><td><code><b>kill [signal] pid ...</b></code></td></tr>
+<tr><td><ul>
+<li>
+po=B9le ka=BEd=E9mu procesu (pid) SIGTERM (pokud nen=ED signal zad=E1n), ne=
+bo sign=E1l=20
+signal
+</li>
+<li>
+p=F8ep=EDna=E8 -l vyp=ED=B9e v=B9echny sign=E1ly
+</li>
+</ul></td></tr>
+</tbody></table></p>
+
+<p><strong>P=F8.</strong>
+Spus=BBte si program <code>top</code> a zabijte ho pomoc=ED SIGKILL.
+</p>
+
+<p><table border=3D"" cellspacing=3D"0" cellpadding=3D"2" width=3D"100%">
+<tbody><tr><td><kbd>kill(2)</kbd></td></tr>
+<tr><td>
+<code>#include &lt;sys/types.h&gt;</code><br><code>#include &lt;signal.h&gt=
+;</code>
+</td></tr>
+<tr><td><code><b>int kill(pid_t pid, int sig);</b></code></td></tr>
+<tr><td><ul>
+<li>po=B9le sign=E1l sig procesu s ID pid</li>
+<li>vrac=ED 0, p=F8i chyb=EC -1</li>
+</ul></td></tr>
+</tbody></table></p>
+
+<p><strong>P=F8.</strong>
+Nahra=EFte funkci <code>raise</code> funkc=ED <code>kill</code>.
+</p>
+
+<p>
+Pro zasl=E1n=ED p=F8=EDkazu procesu jsou rezervov=E1ny dva u=BEivatelsk=E9 =
+sign=E1ly, SIGUSR1
+a SIGUSR2. N=ECkdy se pro tento =FA=E8el pou=BE=EDv=E1 i SIGHUP, na "probuz=
+en=ED" nebo
+"restart" programu.
+</p>
+
+<p><table border=3D"" cellspacing=3D"0" cellpadding=3D"2" width=3D"100%">
+<tbody><tr><td><kbd>strsignal(3)</kbd></td></tr>
+<tr><td>
+<code>#define _GNU_SOURCE</code><br><code>#include &lt;string.h&gt;</code>
+</td></tr>
+<tr><td><code><b>char *strsignal(int sig);</b></code></td></tr>
+<tr><td><ul><li>vr=E1t=ED =F8et=ECzec popisuj=EDc=ED sing=E1l s =E8=EDslem =
+sig</li></ul></td></tr>
+</tbody></table></p>
+
+<p><table border=3D"" cellspacing=3D"0" cellpadding=3D"2" width=3D"100%">
+<tbody><tr><td><kbd>psignal(3)</kbd></td></tr>
+<tr><td><code>#include &lt;signal.h&gt;</code></td></tr>
+<tr><td><code><b>void psignal(int sig, const char *s);</b></code></td></tr>
+<tr><td><ul><li>
+nap=ED=B9e na stderr zpr=E1vu tvaru s: sig_d, kde sig_d je popis sign=E1lu =
+sig
+</li></ul></td></tr>
+</tbody></table></p>
+
+<p><table border=3D"" cellspacing=3D"0" cellpadding=3D"2" width=3D"100%">
+<tbody><tr><td><kbd>pause(2)</kbd></td></tr>
+<tr><td><code>#include &lt;unistd.h&gt;</code></td></tr>
+<tr><td><code><b>int pause(void);</b></code></td></tr>
+<tr><td><ul>
+<li>"usp=ED" proces, dokud nep=F8ijde sign=E1l</li>
+<li>p=F8i p=F8eru=B9en=ED (sign=E1lem) vrac=ED -1</li>
+</ul></td></tr>
+</tbody></table></p>
+
+<p><strong>P=F8.</strong>
+Usp=ECte program a z jin=E9ho termin=E1lu mu po=B9lete SIGCONT.
+</p>
+
+<h3>Obdr=BEen=ED sign=E1lu</h3>
+
+<p>
+Co proces ud=ECl=E1 po obdr=BEen=ED sign=E1lu z=E1le=BE=ED na ur=E8en=ED si=
+gn=E1lu. Ka=BEd=FD sign=E1l
+m=E1 defaultn=ED ur=E8en=ED, kter=E1 ur=E8uje, co se stane, kdy=BE program =
+nestanovuje
+jinak. Pro v=ECt=B9inu sign=E1l=F9 jej m=F9=BEe program ignorovat nebo zavo=
+lat speci=E1ln=ED
+funkci (<dfn>signal-handler</dfn>). P=F8i vol=E1n=ED handleru se program
+zastav=ED, vykon=E1 se
+handler a pak program pokra=E8uje.<br>
+Nap=F8. SIGBUS (bus error), SIGSEGV (segmentation violation) a SIGFPE
+(floating point exception) jsou zasl=E1ny procesu, kdy=BE se pokou=B9=ED pr=
+ov=E9st
+nep=F8=EDpustnou akci. Defaultn=ED ur=E8en=ED sign=E1lu je ukon=E8en=ED pro=
+cesu a vytvo=F8en=ED
+core souboru.
+</p>
+
+<p><table border=3D"" cellspacing=3D"0" cellpadding=3D"2" width=3D"100%">
+<tbody><tr><td><kbd>signal(2)</kbd></td></tr>
+<tr><td>
+<code>#define _GNU_SOURCE</code><br><code>#include &lt;signal.h&gt;</code>
+</td></tr>
+<tr><td>
+<code><b>typedef void (*sighandler_t)(int);</b></code><br><code><b>sighandl=
+er_t signal(int signum, sighandler_t action);</b></code>
+</td></tr>
+<tr><td><ul>
+<li>instaluje nov=FD signal-handler pro sign=E1l s =E8=EDslem signum</li>
+<li>
+action m=F9=BEe b=FDt:
+<ul>
+<li>signal-handler funkce</li>
+<li>SIG_IGN pro ignorov=E1n=ED sign=E1lu</li>
+<li>SIG_DFL pro defaultn=ED ur=E8en=ED sign=E1lu</li>
+</ul>
+</li>
+<li>parametr signal-handler funkce je =E8=EDslo sign=E1lu</li>
+<li>
+defaultn=ED ur=E8en=ED sign=E1l=F9 jsou pops=E1ny v <kbd>signal(7)</kbd>
+</li>
+<li>nelze instalovat handler na SIGKILL a SIGSTOP</li>
+<li>sighandler_t je GNU roz=B9=ED=F8en=ED</li>
+<li>vrac=ED p=F8edchoz=ED signal-handler, nebo p=F8i chyb=EC SIG_ERR</li>
+</ul></td></tr>
+</tbody></table></p>
+
+<p><strong>P=F8.</strong>
+Napi=B9te signal-handler, kter=FD bude bude po=E8=EDtat, kolik sign=E1l=F9 =
+SIGTERM
+program dostane. P=F8i SIGQUIT se ukon=E8=ED a vyp=ED=B9e po=E8et obdr=BEen=
+=FDch sign=E1l=F9=20
+SIGTERM. Po=B9lete programu p=E1r sign=E1l=F9 SIGTERM a pak SIGQUIT.
+</p>
+
+<p>
+Proto=BEe sign=E1ly jsou asynchronn=ED, program by mohl b=FDt p=F8i zpracov=
+=E1v=E1n=ED
+sign=E1lu v nekonzistentn=EDm stavu a proto by se v signal-handleru nem=ECl=
+y volat
+knihovn=ED a syst=E9mov=E9 funkce a vykon=E1vat I/O operace. signal-handler=
+ by m=ECl
+vykonat jen pr=E1ci nezbytn=EC nutnou k o=B9et=F8en=ED sign=E1lu.<br>
+Je mo=BEn=E9, =BEe signal-handler bude p=F8eru=B9en obdr=BEen=EDm jin=E9ho =
+sign=E1lu. Pokud se
+to stane, je velmi t=EC=BEk=E9 to debugovat, pokud je tam chyba, proto by s=
+e m=ECl
+d=E1vat velk=FD pozor na to, co se v signal-handleru prov=E1d=ED.<br>
+Nebezpe=E8n=E9 je dokonce i p=F8i=F8azen=ED do glob=E1ln=ED prom=ECnn=E9, p=
+roto=BEe m=F9=BEe
+prob=EDhat ve v=EDce instrukc=EDch, a druh=FD sign=E1l se m=F9=BEe vyskytno=
+ut mezi nimi.
+Tato glob=E1ln=ED prom=ECnn=E1 by m=ECla b=FDt typu sig_atomic_t, do kter=
+=E9ho se
+p=F8i=F8azuje v jedn=E9 instrukci (proto=BEe je to int).
+</p>
+
+<p><table border=3D"" cellspacing=3D"0" cellpadding=3D"2" width=3D"100%">
+<tbody><tr><td><code>#include &lt;signal.h&gt;</code></td></tr>
+<tr><td>
+<code><b>typedef int __sig_atomic_t;</b></code><br><code><b>typedef __sig_a=
+tomic_t sig_atomic_t;</b></code>
+</td></tr>
+</tbody></table></p>
+
+<p><strong>P=F8.</strong>
+Prom=ECnnou, ve kter=E9 po=E8=EDt=E1te po=E8et sign=E1l=F9 SIGTERM, zm=EC=
+=F2te na typ
+sig_atomic_t.
+</p>
+
+<p><table border=3D"" cellspacing=3D"0" cellpadding=3D"2" width=3D"100%">
+<tbody><tr><td><kbd>alarm(2)</kbd></td></tr>
+<tr><td><code>#include &lt;unistd.h&gt;</code></td></tr>
+<tr><td><code><b>unsigned int alarm(unsigned int seconds);</b></code></td><=
+/tr>
+<tr><td><ul>
+<li>po=B9le procesu SIGALRM za seconds sekund</li>
+<li>pokud seconds je 0, nic se nena=E8asuje</li>
+<li>
+vrac=ED zb=FDvaj=EDc=ED po=E8et sekund do zasl=E1n=ED sign=E1lu, nebo 0, po=
+kud nen=ED
+na=E8asov=E1n =BE=E1dn=FD alarm
+</li>
+</ul></td></tr>
+</tbody></table></p>
+
+<p><strong>P=F8.</strong>
+Za=F8i=EFte, aby se program s=E1m ukon=E8il po 10 sekund=E1ch b=EChu.
+</p>
+
+<h3>Procesy a sign=E1ly</h3>
+
+<p>
+Proces m=F9=BEe skon=E8it abnorm=E1ln=EC, jako odpov=EC=EF na sign=E1l. Nap=
+=F8. SIGBUS,
+SIGSEGV a SIGFPE zp=F9sob=ED ukon=E8en=ED procesu. Dal=B9=ED sign=E1ly slou=
+=BE=ED k
+explicitn=EDmu ukon=E8en=ED. SIGINT je procesu zasl=E1n, kdy=BE se jej u=BE=
+ivatel sna=BE=ED
+ukon=E8it pomoc=ED C-C. SIGTERM pos=EDl=E1 <code>kill</code>. P=F8i vol=E1n=
+=ED
+funkce abort si proces
+s=E1m po=B9le SIGABRT, co=BE jej tak=E9 ukon=E8=ED s core souborem. Nejmocn=
+=ECj=B9=ED je
+SIGKILL, kter=FD jej okam=BEit=EC ukon=E8=ED a program tomu nem=F9=BEe nija=
+k zabr=E1nit
+(blokovat, ingnorovat, o=B9et=F8it).
+</p>
+
+<p>
+=C8ek=E1n=ED na potomka pomoc=ED <code>wait</code> proces blokuje, dokud se
+potomek neukon=E8=ED.
+V=ECt=B9inou ale chceme, aby i rodi=E8 pokra=E8ovat d=E1l. Jak se ale posta=
+rat o
+potomka ihned po jeho ukon=E8en=ED, tak, aby nez=F9st=E1vali zombie?
+Jedna mo=BEnost je periodicky volat <code>wait3</code> nebo
+<code>wait4</code>, kter=E9 lze volat i v
+neblokuj=EDc=EDm m=F3du.<br>
+Mnohem lep=B9=ED je ale rodi=E8e informovat o ukon=E8en=ED potomka, pomoc=
+=ED sign=E1lu.
+Kdy=BE se ukon=E8=ED potomek, syst=E9m po=B9le rodi=E8i sign=E1l SIGCHLD, k=
+ter=FD defaultn=EC
+nem=E1 =BE=E1dn=E9 ur=E8en=ED. Funkci wait tedy zavol=E1me v signal-handler=
+u sign=E1lu
+SIGCHLD.
+</p>
+
+<p>
+<a href=3D"http://phoenix.inf.upol.cz/~outrata/courses/os2/texts/examples/s=
+ignals_l1.c"><strong>P=D8=CDKLAD</strong></a>
+</p>
+
+
+
+<p>
+Dal=B9=ED funkce t=FDkaj=EDc=ED se sign=E1l=F9 jsou:
+</p><ul>
+<li><kbd>sigaction(2)</kbd></li>
+<li><kbd>sigprocmask(2)</kbd></li>
+<li><kbd>sigpending(2)</kbd></li>
+<li><kbd>sigsuspend(2)</kbd></li>
+<li><kbd>sigblock(2)</kbd></li>
+<li><kbd>siggetmask(2)</kbd></li>
+<li><kbd>sigsetmask(2)</kbd></li>
+<li><kbd>sigmask(2)</kbd></li>
+<li><kbd>siginterrupt(2)</kbd></li>
+<li><kbd>sigpause(2)</kbd></li>
+</ul>
+<p></p>
+
+<br><div align=3D"center">
+<hr size=3D"2">
+<address><font size=3D"2"><b>Jan Outrata</b><br><a href=3D"mailto:outrata@p=
+hoenix.inf.upol.cz">
+outrata@phoenix.inf.upol.cz
+</a></font></address>
+</div>
+
+
+</body></html>
+------MultipartBoundary--IOZaqYxGBMNeBBL5sRzDTrlEVxQOwYPID1uyg8UdoC------
